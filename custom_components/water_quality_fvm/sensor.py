@@ -23,7 +23,7 @@ DEFAULT_NAME = 'Water Quality FVM'
 DEFAULT_REGION = "Budapest - I. kerület"
 DEFAULT_ICON = 'mdi:water'
 
-SCAN_INTERVAL = timedelta(minutes=5)
+SCAN_INTERVAL = timedelta(hours=1)
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
