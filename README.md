@@ -21,10 +21,14 @@ Define sensor with the following configuration parameters:<br />
 | Name | Optional | `Default` | Description |
 | :---- | :---- | :------- | :----------- |
 | name | **Y** | `water_quality_fvm` | name of the sensor |
-| region | **Y** | `` | region string (see below) |
+| region | **Y** | `Budapest - I. kerület` | region string (see below) |
 ---
 
 Region should match case sensitively the location specified at [FVM vízminőség, keménység](https://www.vizmuvek.hu/hu/fovarosi-vizmuvek/lakossagi-ugyfelek/altalanos_informaciok/vizminoseg_vizkemenyseg).
+
+Example of water quality information:
+
+![Water quality attributes](https://raw.githubusercontent.com/amaximus/water_quality_fvm/main/water_quality_attrs.png)
 
 ## Example
 ```
