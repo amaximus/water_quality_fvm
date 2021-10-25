@@ -24,7 +24,7 @@ Define sensor with the following configuration parameters:<br />
 | region | **Y** | `Budapest - I. kerület` | region string (see below) |
 ---
 
-Region should match case sensitively the location specified at [FVM vízminőség, keménység](https://www.vizmuvek.hu/hu/fovarosi-vizmuvek/lakossagi-ugyfelek/altalanos_informaciok/vizminoseg_vizkemenyseg).
+Region should match the location specified at [FVM vízminőség, keménység](https://www.vizmuvek.hu/hu/fovarosi-vizmuvek/lakossagi-ugyfelek/altalanos_informaciok/vizminoseg_vizkemenyseg).
 
 Example of water quality information:
 
@@ -33,6 +33,7 @@ Example of water quality information:
 ## Example
 ```
 platform: water_quality_fvm
+region: 'Budapest - XXII. kerület'
 ```
 
 ## Thanks

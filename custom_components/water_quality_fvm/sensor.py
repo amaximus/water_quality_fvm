@@ -50,7 +50,7 @@ async def async_get_wqdata(self):
     rsp = rsp1.split("\n")
 
     for ind, line in enumerate(rsp):
-      if self._region in line:
+      if self._region.lower() in line.lower():
         _LOGGER.debug("location: " + line)
         jsonstr = '{\"location\":\"' + _get_location(line.lstrip()) + '\",' + \
           '\"water_quality\":['
