@@ -141,14 +141,13 @@ class WaterQualityFVMSensor(Entity):
                         kemenystr = "nagyon lágy"
                     self._kemenyseg = kemenystr
 
-                else:
-                    item['state'] = "ok"
-                    if item.get('limit') is not None:
-                        if float(val) > float(item.get('limit')):
-                            item['state'] = "out of range"
-                            out_of_range += 1
-                        else:
-                             item['state'] = "ok"
+                item['state'] = "ok"
+                if item.get('limit') is not None:
+                    if float(val) > float(item.get('limit')):
+                        item['state'] = "out of range"
+                        out_of_range += 1
+                    else:
+                        item['state'] = "ok"
 
         self._state = out_of_range
         return self._state

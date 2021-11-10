@@ -32,10 +32,48 @@ Example of water quality information:
 
 ![Water quality attributes](https://raw.githubusercontent.com/amaximus/water_quality_fvm/main/water_quality_attrs.png)
 
-## Example
+## Examples
 ```
 platform: water_quality_fvm
 region: 'Budapest - XXII. kerület'
+```
+
+Example Lovelace UI conditional custom button card:
+```
+type: conditional
+conditions:
+  - entity: sensor.water_quality_fvm
+    state_not: '0'
+card:
+  type: custom:button-card
+  color_type: icon
+  show_label: true
+  show_name: false
+  show_icon: true
+  entity: sensor.water_quality_fvm
+  size: 30px
+  styles:
+    label:
+      - font-size: 90%
+      - text-align: left
+    card:
+      - height: 80px
+    icon:
+      - color: var(--paper-item-icon-active-color)
+   layout: icon_label
+   label: >
+     [[[
+       var label = ""
+       var w_alerts = states['sensor.water_quality_fvm'].attributes.water_quality;
+       for (var k=0; k < states['sensor.water_quality_fvm'].state; k++) {
+         if ( w_alerts[k].state != "ok" ) {
+           label += w_alerts[k].name + ": " + w_alerts[k].value + " " +
+                    w_alerts[k].unit + "&nbsp;&nbsp;(" + w_alerts[k].limit +
+                    " " + w_alerts[k].unit + ")" + `<br>`
+         }
+       }
+       return label;
+     ]]]
 ```
 
 ## Thanks
