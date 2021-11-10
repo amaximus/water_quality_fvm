@@ -8,6 +8,8 @@ This custom component integrates water quality information provided by Budapest 
 
 The state of the sensor will be the number of monitored items above their threshold. Thresholds are defined on the `FVM vízminőség, vízkeménység` page (see below).
 
+State of a water quality element can be either `ok` or `out of range`.
+
 Water hardness value is listed with other monitored elements, while the human readable water hardness string is listed as a standalone attribute.
 
 #### Installation
