@@ -60,20 +60,20 @@ card:
       - height: 80px
     icon:
       - color: var(--paper-item-icon-active-color)
-   layout: icon_label
-   label: >
-     [[[
-       var label = ""
-       var w_alerts = states['sensor.water_quality_fvm'].attributes.water_quality;
-       for (var k=0; k < states['sensor.water_quality_fvm'].state; k++) {
-         if ( w_alerts[k].state != "ok" ) {
-           label += w_alerts[k].name + ": " + w_alerts[k].value + " " +
-                    w_alerts[k].unit + "&nbsp;&nbsp;(" + w_alerts[k].limit +
-                    " " + w_alerts[k].unit + ")" + `<br>`
-         }
-       }
-       return label;
-     ]]]
+  layout: icon_label
+  label: >
+    [[[
+      var label = ""
+      var w_alerts = states['sensor.water_quality_fvm'].attributes.water_quality;
+      for (var k=0; k < states['sensor.water_quality_fvm'].state; k++) {
+        if ( w_alerts[k].state != "ok" ) {
+          label += w_alerts[k].name + ": " + w_alerts[k].value + " " +
+                   w_alerts[k].unit + "&nbsp;&nbsp;(" + w_alerts[k].limit +
+                   " " + w_alerts[k].unit + ")" + `<br>`
+        }
+      }
+      return label;
+    ]]]
 ```
 
 ## Thanks
