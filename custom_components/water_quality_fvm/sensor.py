@@ -42,8 +42,9 @@ async def async_get_wqdata(self):
     wqjson = {}
     jsonstr = ''
     l2print = False
-
-    url = 'https://www.vizmuvek.hu/hu/fovarosi-vizmuvek/lakossagi-ugyfelek/altalanos_informaciok/vizminoseg_vizkemenyseg'
+    # URL not valid as of 2021-12-23
+    #url = 'https://www.vizmuvek.hu/hu/fovarosi-vizmuvek/lakossagi-ugyfelek/altalanos_informaciok/vizminoseg_vizkemenyseg'
+    url = 'https://www.vizmuvek.hu/hu/kezdolap/informaciok/vizminoseg-vizkemenyseg'
     async with self._session.get(url) as response:
         rsp1 = await response.text()
 
@@ -64,7 +65,8 @@ async def async_get_wqdata(self):
         else:
           jsonstr += ','
     _LOGGER.debug("jsonstr: " + jsonstr)
-    wqjson = json.loads(jsonstr)
+    if jsonstr is not None:
+      wqjson = json.loads(jsonstr)
     return wqjson
 
 def _get_location(region):
@@ -106,7 +108,7 @@ class WaterQualityFVMSensor(Entity):
         self._kemenyseg = ''
 
     @property
-    def device_state_attributes(self):
+    def extra_state_attributes(self):
         attr = {}
 
         if 'water_quality' in self._wqdata:

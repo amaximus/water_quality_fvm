@@ -3,7 +3,7 @@
   "name": "Water Quality FVM",
   "documentation": "https://github.com/amaximus/water_quality_fvm",
   "issue_tracker": "https://github.com/amaximus/water_quality_fvm/issues",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "dependencies": [],
   "codeowners": ["@amaximus"],
   "iot_class": "cloud_polling",
