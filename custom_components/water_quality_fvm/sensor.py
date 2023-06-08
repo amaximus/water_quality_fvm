@@ -1,4 +1,3 @@
-import asyncio
 import json
 import logging
 import voluptuous as vol
@@ -30,8 +29,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_REGION, default=DEFAULT_REGION): cv.string,
 })
 
-@asyncio.coroutine
-def async_setup_platform(hass, config, async_add_devices, discovery_info=None):
+async def async_setup_platform(hass, config, async_add_devices, discovery_info=None):
     name = config.get(CONF_NAME)
     region = config.get(CONF_REGION)
 
@@ -119,7 +117,6 @@ class WaterQualityFVMSensor(Entity):
         attr["provider"] = CONF_ATTRIBUTION
         return attr
 
-    @asyncio.coroutine
     async def async_update(self):
         wqdata = await async_get_wqdata(self)
         out_of_range = 0
