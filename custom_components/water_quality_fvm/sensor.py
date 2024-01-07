@@ -17,24 +17,28 @@ _LOGGER = logging.getLogger(__name__)
 CONF_ATTRIBUTION = "Data provided by vizmuvek.hu"
 CONF_NAME = 'name'
 CONF_REGION = 'region'
+CONF_SSL = 'ssl'
 
 DEFAULT_NAME = 'Water Quality FVM'
 DEFAULT_REGION = "Budapest - I. kerület"
 DEFAULT_ICON = 'mdi:water'
+DEFAULT_SSL = True
 
 SCAN_INTERVAL = timedelta(hours=1)
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
     vol.Required(CONF_REGION, default=DEFAULT_REGION): cv.string,
+    vol.Optional(CONF_SSL, default=DEFAULT_SSL): cv.boolean,
 })
 
 async def async_setup_platform(hass, config, async_add_devices, discovery_info=None):
     name = config.get(CONF_NAME)
     region = config.get(CONF_REGION)
+    ssl = config.get(CONF_SSL)
 
     async_add_devices(
-        [WaterQualityFVMSensor(hass, name, region )],update_before_add=True)
+        [WaterQualityFVMSensor(hass, name, region, ssl )],update_before_add=True)
 
 async def async_get_wqdata(self):
     wqjson = {}
@@ -94,7 +98,7 @@ def _get_wq_limit(argument):
 
 class WaterQualityFVMSensor(Entity):
 
-    def __init__(self, hass, name, region):
+    def __init__(self, hass, name, region, ssl):
         """Initialize the sensor."""
         self._hass = hass
         self._name = name
@@ -102,7 +106,7 @@ class WaterQualityFVMSensor(Entity):
         self._state = None
         self._wqdata = []
         self._icon = DEFAULT_ICON
-        self._session = async_get_clientsession(hass)
+        self._session = async_get_clientsession(hass, ssl)
         self._kemenyseg = ''
 
     @property

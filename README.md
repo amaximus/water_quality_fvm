@@ -24,6 +24,7 @@ Define sensor with the following configuration parameters:<br />
 | :---- | :---- | :------- | :----------- |
 | name | **Y** | `water_quality_fvm` | name of the sensor |
 | region | **Y** | `Budapest - I. kerület` | region string (see below) |
+| ssl | **Y** | `true` | control SSL verification. This is useful when CA store update with new root/intermediate certificates is problematic. WARNING: setting this to `false` is a security breach. |
 ---
 
 Region should match the location specified at [FVM vízminőség, keménység](https://www.vizmuvek.hu/hu/kezdolap/informaciok/vizminoseg-vizkemenyseg).
