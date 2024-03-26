@@ -1,8 +1,9 @@
+import aiohttp
+import asyncio
+from datetime import timedelta
 import json
 import logging
 import voluptuous as vol
-import aiohttp
-from datetime import timedelta
 
 from homeassistant.components.sensor import PLATFORM_SCHEMA
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -24,6 +25,8 @@ DEFAULT_REGION = "Budapest - I. kerület"
 DEFAULT_ICON = 'mdi:water'
 DEFAULT_SSL = True
 
+HTTP_TIMEOUT = 5 # secs
+MAX_RETRIES = 3
 SCAN_INTERVAL = timedelta(hours=1)
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
@@ -40,15 +43,31 @@ async def async_setup_platform(hass, config, async_add_devices, discovery_info=N
     async_add_devices(
         [WaterQualityFVMSensor(hass, name, region, ssl )],update_before_add=True)
 
+def _sleep(secs):
+    time.sleep(secs)
+
 async def async_get_wqdata(self):
     wqjson = {}
-    jsonstr = ''
+    jsonstr = None
     l2print = False
+
+    _session = async_get_clientsession(self._hass, self._ssl)
+
     # URL not valid as of 2021-12-23
     #url = 'https://www.vizmuvek.hu/hu/fovarosi-vizmuvek/lakossagi-ugyfelek/altalanos_informaciok/vizminoseg_vizkemenyseg'
     url = 'https://www.vizmuvek.hu/hu/kezdolap/informaciok/vizminoseg-vizkemenyseg'
-    async with self._session.get(url) as response:
-        rsp1 = await response.text()
+    for i in range(MAX_RETRIES):
+      try:
+        async with _session.get(url, timeout=HTTP_TIMEOUT) as response:
+          rsp1 = await response.text()
+
+        if response.status == 200:
+          _LOGGER.debug("Fetch attempt " + str(i+1) + " successful for " + url)
+          break
+      except (aiohttp.ContentTypeError, aiohttp.ServerDisconnectedError, asyncio.TimeoutError, aiohttp.ClientConnectorError):
+        rsp1 = ""
+        _LOGGER.debug("Connection error on fetch attempt " + str(i+1) + " for " + url)
+        await hass.async_add_executor_job(_sleep, 10)
 
     rsp = rsp1.split("\n")
 
@@ -106,7 +125,7 @@ class WaterQualityFVMSensor(Entity):
         self._state = None
         self._wqdata = []
         self._icon = DEFAULT_ICON
-        self._session = async_get_clientsession(hass, ssl)
+        self._ssl = ssl
         self._kemenyseg = ''
 
     @property

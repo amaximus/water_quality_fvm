@@ -1,8 +1,8 @@
 {
   "water_quality_fvm": {
-    "version": "0.3.0",
-    "updated_at": "2024-01-07",
+    "version": "0.3.1",
+    "updated_at": "2024-03-26",
     "visit_repo": "https://github.com/amaximus/water_quality_fvm",
-    "changelog": "https://github.com/amaximus/water_quality_fvm/releases/0.3.0"
+    "changelog": "https://github.com/amaximus/water_quality_fvm/releases/0.3.1"
   }
 }
