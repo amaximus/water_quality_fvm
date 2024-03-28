@@ -3,6 +3,7 @@ import asyncio
 from datetime import timedelta
 import json
 import logging
+import time
 import voluptuous as vol
 
 from homeassistant.components.sensor import PLATFORM_SCHEMA
@@ -25,7 +26,7 @@ DEFAULT_REGION = "Budapest - I. kerület"
 DEFAULT_ICON = 'mdi:water'
 DEFAULT_SSL = True
 
-HTTP_TIMEOUT = 5 # secs
+HTTP_TIMEOUT = 15 # secs
 MAX_RETRIES = 3
 SCAN_INTERVAL = timedelta(hours=1)
 
@@ -66,10 +67,10 @@ async def async_get_wqdata(self):
           await self._hass.async_add_executor_job(_sleep, 10)
         else:
           break
-      except (aiohttp.ContentTypeError, aiohttp.ServerDisconnectedError, asyncio.TimeoutError, aiohttp.ClientConnectorError) as err:
+      except Exception as err:
         rsp1 = ""
         _LOGGER.debug("Fetch attempt " + str(i+1) + " failed for " + url)
-        _LOGGER.error(err)
+        _LOGGER.error("error: {err} of type: {type(err)}")
         await self._hass.async_add_executor_job(_sleep, 10)
 
     rsp = rsp1.split("\n")
