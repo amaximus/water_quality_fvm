@@ -61,13 +61,16 @@ async def async_get_wqdata(self):
         async with _session.get(url, timeout=HTTP_TIMEOUT) as response:
           rsp1 = await response.text()
 
-        if response.status == 200:
-          _LOGGER.debug("Fetch attempt " + str(i+1) + " successful for " + url)
+        if not response.status // 100 == 2:
+          _LOGGER.debug("Fetch attempt " + str(i+1) + ":unexpected responsefailed " + str(response.status))
+          await self._hass.async_add_executor_job(_sleep, 10)
+        else:
           break
-      except (aiohttp.ContentTypeError, aiohttp.ServerDisconnectedError, asyncio.TimeoutError, aiohttp.ClientConnectorError):
+      except (aiohttp.ContentTypeError, aiohttp.ServerDisconnectedError, asyncio.TimeoutError, aiohttp.ClientConnectorError) as err:
         rsp1 = ""
-        _LOGGER.debug("Connection error on fetch attempt " + str(i+1) + " for " + url)
-        await hass.async_add_executor_job(_sleep, 10)
+        _LOGGER.debug("Fetch attempt " + str(i+1) + " failed for " + url)
+        _LOGGER.error(err)
+        await self._hass.async_add_executor_job(_sleep, 10)
 
     rsp = rsp1.split("\n")
 
