@@ -54,8 +54,6 @@ async def async_get_wqdata(self):
 
     _session = async_get_clientsession(self._hass, self._ssl)
 
-    # URL not valid as of 2021-12-23
-    #url = 'https://www.vizmuvek.hu/hu/fovarosi-vizmuvek/lakossagi-ugyfelek/altalanos_informaciok/vizminoseg_vizkemenyseg'
     url = 'https://www.vizmuvek.hu/hu/kezdolap/informaciok/vizminoseg-vizkemenyseg'
     for i in range(MAX_RETRIES):
       try:
@@ -70,7 +68,7 @@ async def async_get_wqdata(self):
       except Exception as err:
         rsp1 = ""
         _LOGGER.debug("Fetch attempt " + str(i+1) + " failed for " + url)
-        _LOGGER.error("error: {err} of type: {type(err)}")
+        _LOGGER.error(f'error: {err} of type: {type(err)}')
         await self._hass.async_add_executor_job(_sleep, 10)
 
     rsp = rsp1.split("\n")
@@ -89,8 +87,8 @@ async def async_get_wqdata(self):
           jsonstr += ']}'
         else:
           jsonstr += ','
-    _LOGGER.debug("jsonstr: " + jsonstr)
     if jsonstr is not None:
+      _LOGGER.debug("jsonstr: " + jsonstr)
       wqjson = json.loads(jsonstr)
     return wqjson
 
