@@ -26,7 +26,7 @@ DEFAULT_REGION = "Budapest - I. kerület"
 DEFAULT_ICON = 'mdi:water'
 DEFAULT_SSL = True
 
-HTTP_TIMEOUT = 15 # secs
+HTTP_TIMEOUT = 60 # secs
 MAX_RETRIES = 3
 SCAN_INTERVAL = timedelta(hours=1)
 
