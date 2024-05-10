@@ -3,6 +3,7 @@ import asyncio
 from datetime import timedelta
 import json
 import logging
+import re
 import time
 import voluptuous as vol
 
@@ -87,9 +88,11 @@ async def async_get_wqdata(self):
           jsonstr += ']}'
         else:
           jsonstr += ','
+      if jsonstr is not None:
+        _LOGGER.debug("result: " + str(jsonstr))
     if jsonstr is not None:
       _LOGGER.debug("jsonstr: " + jsonstr)
-      wqjson = json.loads(jsonstr)
+      wqjson = json.loads(jsonstr.replace(',,,,',',').replace('},]}','}]}'))
     return wqjson
 
 def _get_location(region):
@@ -97,10 +100,17 @@ def _get_location(region):
       replace('</th></tr>','')
 
 def _get_wquality(wqstring):
-  return wqstring.replace('<tr><td class="name">','{\"name\":\"').\
-      replace('</td><td class="value">','\",\"value\":\"').\
-      replace('</td><td class="measurment">','\",\"unit\":\"').\
+  HTMLCOMMENT = re.compile('<!--.*-->')
+  wqstring1 = re.sub(HTMLCOMMENT,'',wqstring)
+
+  wqstring2 = wqstring1.replace('<tr><td class="name">','{\"name\":\"').\
+      replace('</td><td class="value text-right">','\",\"value\":\"').\
       replace('</td></tr>','\"}')
+
+  NUMBER = re.compile('([0-9]+,*[0-9]*) ')
+  wqstring = re.sub(NUMBER,'\\1\",\"unit\":\"',wqstring2)
+
+  return wqstring
 
 def _get_wq_limit(argument):
     switcher = {
